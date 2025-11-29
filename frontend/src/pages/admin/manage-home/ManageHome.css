@@ -1,0 +1,41 @@
+.manage-home-page {
+    gap: 1.75rem;
+}
+
+.manage-home-tabs {
+    display      : flex;
+    flex-wrap    : wrap;
+    gap          : 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.manage-home-tab {
+    border       : 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 16px;
+    padding      : 0.85rem 1.2rem;
+    background   : rgba(248, 250, 252, 0.6);
+    text-align   : left;
+    cursor       : pointer;
+    transition   : border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-home-tab.is-active {
+    border-color: rgba(14, 165, 233, 0.7);
+    box-shadow  : 0 15px 30px -20px rgba(14, 165, 233, 0.5);
+    background  : #fff;
+}
+
+.manage-home-tab-label {
+    display    : block;
+    font-weight: 600;
+    color      : #0f172a;
+}
+
+.manage-home-tab-meta {
+    display       : block;
+    font-size     : 0.75rem;
+    color         : #64748b;
+    margin-top    : 0.15rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}

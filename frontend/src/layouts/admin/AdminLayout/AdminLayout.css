@@ -1,0 +1,418 @@
+.admin-shell {
+    position       : relative;
+    display        : flex;
+    min-height     : 100vh;
+    color          : #0f172a;
+    background     : #f8fafc;
+    overflow       : hidden;
+    scroll-behavior: smooth;
+}
+
+.admin-shell::before,
+.admin-shell::after {
+    content: none;
+}
+
+.admin-shell__sidebar {
+    width          : 280px;
+    background     : rgba(255, 255, 255, 0.72);
+    border-right   : 1px solid rgba(148, 163, 184, 0.25);
+    backdrop-filter: blur(25px);
+    display        : flex;
+    flex-direction : column;
+    padding        : 1.75rem 1.5rem 1.5rem;
+    position       : relative;
+    z-index        : 2;
+    transition     : width 0.25s ease, padding 0.25s ease, transform 0.25s ease;
+    box-shadow     : 0 30px 65px -40px rgba(15, 23, 42, 0.35);
+    overflow       : visible;
+}
+
+.admin-shell__sidebar.is-collapsed {
+    width          : 0;
+    min-width      : 0;
+    padding        : 0;
+    background     : transparent;
+    border-right   : none;
+    box-shadow     : none;
+    backdrop-filter: none;
+    pointer-events : none;
+}
+
+.admin-shell__sidebar.is-mobile-open {
+    transform: translateX(0);
+}
+
+@media (max-width: 1023px) {
+    .admin-shell__sidebar {
+        position : fixed;
+        inset    : 0 auto 0 0;
+        transform: translateX(-100%);
+        height   : 100vh;
+    }
+}
+
+.admin-shell__brand {
+    display      : flex;
+    align-items  : center;
+    gap          : 0.9rem;
+    margin-bottom: 2.25rem;
+}
+
+.admin-shell__brand-mark {
+    width        : 46px;
+    height       : 46px;
+    border-radius: 16px;
+    background   : conic-gradient(from 120deg, #38bdf8, #6366f1, #a855f7, #38bdf8);
+    display      : grid;
+    place-items  : center;
+    padding      : 6px;
+    overflow     : hidden;
+    box-shadow   : 0 10px 20px -12px rgba(59, 130, 246, 0.9);
+}
+
+.admin-shell__brand-logo {
+    width     : 100%;
+    height    : 100%;
+    object-fit: contain;
+    display   : block;
+}
+
+.admin-shell__brand-label {
+    font-size  : 1rem;
+    font-weight: 600;
+    color      : #0f172a;
+}
+
+.admin-shell__nav-link {
+    display      : flex;
+    align-items  : center;
+    gap          : 0.75rem;
+    padding      : 0.75rem 0.9rem;
+    border-radius: 0.95rem;
+    font-size    : 0.85rem;
+    color        : rgba(15, 23, 42, 0.7);
+    position     : relative;
+    overflow     : hidden;
+    transition   : color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-shell__nav-link.is-nested {
+    font-size: 0.8rem;
+    padding  : 0.65rem 0.85rem 0.65rem 1.6rem;
+}
+
+.admin-shell__nav-link[data-depth="2"] {
+    padding-left: 2.5rem;
+}
+
+.admin-shell__nav-link--trigger {
+    width     : 100%;
+    border    : none;
+    background: transparent;
+    text-align: left;
+    cursor    : pointer;
+    font      : inherit;
+    color     : inherit;
+    appearance: none;
+}
+
+.admin-shell__nav-group {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.25rem;
+}
+
+.admin-shell__nav-children {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.3rem;
+    margin-left   : 0.5rem;
+    padding-left  : 0.5rem;
+    border-left   : 1px dashed rgba(148, 163, 184, 0.25);
+    max-height    : 0;
+    opacity       : 0;
+    overflow      : hidden;
+    pointer-events: none;
+    transition    : max-height 0.28s ease, opacity 0.2s ease;
+}
+
+.admin-shell__nav-children.is-open {
+    max-height    : 700px;
+    opacity       : 1;
+    pointer-events: auto;
+    padding-top   : 0.25rem;
+    padding-bottom: 0.15rem;
+}
+
+.admin-shell__caret {
+    margin-left  : auto;
+    width        : 1.8rem;
+    height       : 1.8rem;
+    border-radius: 999px;
+    display      : grid;
+    place-items  : center;
+    background   : rgba(15, 23, 42, 0.04);
+    border       : 1px solid rgba(148, 163, 184, 0.25);
+    transition   : background 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-shell__caret::before {
+    content      : "";
+    width        : 0.45rem;
+    height       : 0.45rem;
+    border-right : 2px solid rgba(15, 23, 42, 0.55);
+    border-bottom: 2px solid rgba(15, 23, 42, 0.55);
+    transform    : rotate(-45deg);
+    transition   : transform 0.2s ease, border-color 0.2s ease;
+}
+
+.admin-shell__caret.is-open {
+    background  : rgba(15, 23, 42, 0.08);
+    border-color: rgba(59, 130, 246, 0.35);
+}
+
+.admin-shell__caret.is-open::before {
+    transform   : rotate(45deg);
+    border-color: rgba(15, 23, 42, 0.85);
+}
+
+.admin-shell__nav-link::before {
+    content      : "";
+    position     : absolute;
+    inset        : 0;
+    border-radius: inherit;
+    background   : linear-gradient(120deg, rgba(56, 189, 248, 0.35), rgba(249, 115, 22, 0.25));
+    opacity      : 0;
+    transition   : opacity 0.2s ease;
+}
+
+.admin-shell__nav-link:hover::before,
+.admin-shell__nav-link.is-active::before {
+    opacity: 1;
+}
+
+.admin-shell__nav-link:hover,
+.admin-shell__nav-link:focus-visible,
+.admin-shell__nav-link.is-active {
+    color     : #0f172a;
+    transform : translateX(4px);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.25);
+}
+
+.admin-shell__nav-link:hover .admin-shell__nav-glyph,
+.admin-shell__nav-link:focus-visible .admin-shell__nav-glyph,
+.admin-shell__nav-link.is-active .admin-shell__nav-glyph {
+    background  : rgba(255, 255, 255, 0.9);
+    color       : #0f172a;
+    border-color: rgba(59, 130, 246, 0.45);
+    box-shadow  : 0 12px 20px -14px rgba(59, 130, 246, 0.6);
+}
+
+.admin-shell__nav-glyph {
+    width         : 38px;
+    height        : 38px;
+    border-radius : 0.95rem;
+    background    : rgba(226, 232, 240, 0.65);
+    border        : 1px solid rgba(148, 163, 184, 0.35);
+    display       : grid;
+    place-items   : center;
+    font-weight   : 600;
+    font-size     : 0.72rem;
+    letter-spacing: 0.08em;
+    position      : relative;
+    z-index       : 1;
+    transition    : background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.admin-shell__nav-label {
+    position   : relative;
+    z-index    : 1;
+    white-space: nowrap;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__nav-label,
+.admin-shell__sidebar.is-collapsed .admin-shell__brand-label,
+.admin-shell__sidebar.is-collapsed .admin-shell__brand-sub,
+.admin-shell__sidebar.is-collapsed .admin-shell__sidebar-footer,
+.admin-shell__sidebar.is-collapsed .admin-shell__brand-mark {
+    opacity       : 0;
+    pointer-events: none;
+    width         : 0;
+    height        : 0;
+    visibility    : hidden;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__nav-link {
+    opacity: 0;
+    width  : 0;
+    height : 0;
+    padding: 0;
+    margin : 0;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__nav {
+    opacity       : 0;
+    visibility    : hidden;
+    max-height    : 0;
+    pointer-events: none;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__brand {
+    justify-content: flex-start;
+    margin         : 0;
+    padding        : 0;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__collapse-btn {
+    position      : fixed;
+    left          : 1.25rem;
+    top           : 4.25rem;
+    width         : 34px;
+    height        : 34px;
+    background    : rgba(255, 255, 255, 0.95);
+    border-color  : rgba(148, 163, 184, 0.55);
+    box-shadow    : 0 18px 35px -20px rgba(15, 23, 42, 0.5);
+    transform     : none;
+    pointer-events: auto;
+    z-index       : 40;
+}
+
+.admin-shell__sidebar.is-collapsed .admin-shell__nav-glyph {
+    display: none;
+}
+
+.admin-shell__sidebar-footer {
+    margin-top : auto;
+    padding-top: 2.2rem;
+    font-size  : 0.82rem;
+    color      : rgba(71, 85, 105, 0.85);
+}
+
+.admin-shell__sidebar-footer p:last-child {
+    font-size  : 0.95rem;
+    font-weight: 600;
+    color      : #0f172a;
+}
+
+.admin-shell__overlay {
+    position       : fixed;
+    inset          : 0;
+    background     : rgba(148, 163, 184, 0.25);
+    border         : none;
+    z-index        : 10;
+    backdrop-filter: blur(6px);
+}
+
+.admin-shell__content {
+    position      : relative;
+    flex          : 1;
+    display       : flex;
+    flex-direction: column;
+    background    : #ffffff;
+    z-index       : 1;
+}
+
+.admin-shell__subheader {
+    position                  : relative;
+    display                   : none;
+    align-items               : center;
+    justify-content           : space-between;
+    padding                   : 0.65rem clamp(1.25rem, 4vw, 3rem);
+    border-top                : 1px solid rgba(148, 163, 184, 0.08);
+    border-bottom             : 1px solid rgba(148, 163, 184, 0.12);
+    background                : rgba(255, 255, 255, 0.92);
+    backdrop-filter           : blur(22px) saturate(150%);
+    -webkit-backdrop-filter   : blur(22px) saturate(150%);
+    box-shadow                : 0 18px 38px -32px rgba(15, 23, 42, 0.35);
+    border-bottom-left-radius : 32px;
+    border-bottom-right-radius: 32px;
+    overflow                  : visible;
+    z-index                   : 4;
+}
+
+.admin-shell__subheader>* {
+    position: relative;
+    z-index : 1;
+}
+
+@media (min-width: 768px) {
+    .admin-shell__subheader {
+        display: flex;
+    }
+}
+
+.admin-shell__main {
+    flex         : 1;
+    padding      : 2.5rem clamp(1.25rem, 4vw, 3.25rem);
+    position     : relative;
+    z-index      : 1;
+    width        : 100%;
+    max-width    : 1280px;
+    align-self   : center;
+    margin       : 1.25rem auto 2.75rem;
+    border-radius: 32px;
+    border       : 1px solid rgba(226, 232, 240, 0.8);
+    background   : #ffffff;
+    box-shadow   : 0 25px 45px -30px rgba(15, 23, 42, 0.2);
+    overflow     : hidden;
+    animation    : admin-shell-page-shift 0.3s ease;
+}
+
+.admin-shell__main::before,
+.admin-shell__main::after {
+    content: none;
+}
+
+from {
+    opacity  : 0;
+    transform: translateY(20px) scale(0.995);
+}
+
+to {
+    opacity  : 1;
+    transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .admin-shell,
+    .admin-shell__sidebar,
+    .admin-shell__content,
+    .admin-shell__main {
+        transition: none;
+        animation : none;
+    }
+
+    .admin-shell__nav-children {
+        transition    : none;
+        max-height    : none;
+        opacity       : 1;
+        pointer-events: auto;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .admin-shell__main {
+        border-radius: 24px;
+        margin       : 1rem auto 2rem;
+        padding      : 1.75rem clamp(1rem, 6vw, 2.25rem);
+    }
+}
+
+.admin-shell__nav-glyph.depth-1 {
+    width       : 32px;
+    height      : 32px;
+    font-size   : 0.68rem;
+    border-color: rgba(148, 163, 184, 0.25);
+}
+
+.admin-shell__nav-glyph.depth-2 {
+    width         : 26px;
+    height        : 26px;
+    font-size     : 0.62rem;
+    letter-spacing: 0;
+    border-color  : rgba(148, 163, 184, 0.2);
+    background    : rgba(148, 163, 184, 0.15);
+}

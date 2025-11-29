@@ -1,0 +1,94 @@
+.inquiry-table .inquiry-status-chip {
+    display       : inline-flex;
+    align-items   : center;
+    gap           : 0.35rem;
+    border-radius : 999px;
+    padding       : 0.25rem 0.9rem;
+    font-size     : 0.7rem;
+    font-weight   : 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.inquiry-status-chip.default {
+    background: rgba(148, 163, 184, 0.25);
+    color     : #475569;
+}
+
+.inquiry-status-chip.new {
+    background: rgba(56, 189, 248, 0.15);
+    color     : #0369a1;
+}
+
+.inquiry-status-chip.in-progress {
+    background: rgba(251, 191, 36, 0.2);
+    color     : #92400e;
+}
+
+.inquiry-status-chip.closed,
+.inquiry-status-chip.done {
+    background: rgba(16, 185, 129, 0.2);
+    color     : #065f46;
+}
+
+.inquiry-service-pill {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 0.3rem;
+    border-radius: 999px;
+    border       : 1px solid rgba(15, 23, 42, 0.1);
+    padding      : 0.25rem 0.75rem;
+    font-size    : 0.75rem;
+    font-weight  : 600;
+    color        : #0f172a;
+    background   : rgba(241, 245, 249, 0.8);
+}
+
+.inquiry-meta,
+.inquiry-service,
+.inquiry-contact {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.4rem;
+}
+
+.inquiry-meta-tag {
+    display       : inline-flex;
+    align-items   : center;
+    border-radius : 999px;
+    padding       : 0.2rem 0.6rem;
+    font-size     : 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    background    : rgba(15, 23, 42, 0.04);
+    color         : #475569;
+}
+
+.inquiry-message {
+    color      : #0f172a;
+    font-size  : 0.9rem;
+    line-height: 1.4;
+}
+
+.inquiry-contact strong {
+    font-size: 0.9rem;
+    color    : #0f172a;
+}
+
+.inquiry-contact span {
+    font-size: 0.78rem;
+    color    : #475569;
+}
+
+.inquiry-card .rolepermission-head h1 {
+    color: #0f172a;
+}
+
+.inquiry-card .rolepermission-head p {
+    color: #475569;
+}
+
+.rolepermission-btn:disabled {
+    opacity: 0.65;
+    cursor : not-allowed;
+}

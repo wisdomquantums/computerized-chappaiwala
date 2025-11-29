@@ -1,0 +1,30 @@
+.manage-portfolio-page {
+    animation: fadeInPortfolio 0.2s ease-out;
+}
+
+@keyframes fadeInPortfolio {
+    from {
+        opacity  : 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity  : 1;
+        transform: translateY(0);
+    }
+}
+
+.manage-portfolio-card input:focus {
+    outline     : none;
+    border-color: rgb(14 165 233);
+    box-shadow  : 0 0 0 3px rgb(14 165 233 / 0.15);
+}
+
+.manage-portfolio-tile {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.manage-portfolio-tile:hover {
+    transform : translateY(-4px);
+    box-shadow: 0 15px 25px -10px rgb(15 23 42 / 0.2);
+}

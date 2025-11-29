@@ -1,0 +1,46 @@
+.ticket-composer {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1rem;
+    padding       : 1.5rem;
+    border-top    : 1px solid rgba(15, 23, 42, 0.08);
+    background    : rgba(255, 255, 255, 0.8);
+    border-radius : 24px;
+}
+
+.ticket-composer-grid {
+    display              : grid;
+    gap                  : 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.ticket-composer label {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.35rem;
+    font-size     : 0.7rem;
+    font-weight   : 600;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color         : #475569;
+}
+
+.ticket-composer input,
+.ticket-composer select,
+.ticket-composer textarea {
+    border-radius: 999px;
+    border       : 1px solid rgba(15, 23, 42, 0.12);
+    padding      : 0.85rem 1.25rem;
+    font-size    : 0.9rem;
+    color        : #0f172a;
+    background   : #fff;
+}
+
+.ticket-composer textarea {
+    border-radius: 24px;
+    resize       : vertical;
+}
+
+.ticket-composer .rolepermission-form-actions {
+    justify-content: flex-end;
+}

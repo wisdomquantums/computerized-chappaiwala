@@ -1,0 +1,424 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+:root {
+    --register-bg          : #05060a;
+    --register-card-dark   : rgba(11, 15, 34, 0.88);
+    --register-card-light  : #f8fafc;
+    --register-border-dark : rgba(255, 255, 255, 0.08);
+    --register-border-light: rgba(15, 23, 42, 0.12);
+    --register-muted       : #94a3b8;
+    --register-radius      : 26px;
+}
+
+/* ===== Page Layout ===== */
+.register-page {
+    position       : relative;
+    min-height     : 100vh;
+    padding        : clamp(1.25rem, 3vw, 3.25rem) clamp(0.75rem, 4vw, 3rem);
+    background     : radial-gradient(circle at top, rgba(82, 67, 255, 0.08), transparent 45%), var(--register-bg);
+    color          : #f7f7fb;
+    font-family    : "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    display        : flex;
+    justify-content: center;
+    align-items    : flex-start;
+    box-sizing     : border-box;
+    overflow       : hidden;
+}
+
+.register-page::before,
+.register-page::after {
+    content       : "";
+    position      : absolute;
+    inset         : 0;
+    pointer-events: none;
+}
+
+.register-page::before {
+    background: radial-gradient(circle at 15% 20%, rgba(103, 232, 249, 0.25), transparent 45%),
+        radial-gradient(circle at 85% 15%, rgba(129, 140, 248, 0.35), transparent 40%);
+    filter : blur(70px);
+    opacity: 0.9;
+    z-index: 0;
+}
+
+.register-page::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath fill='%23fff' fill-opacity='.05' d='M0 0h2v2H0z'/%3E%3C/g%3E%3C/svg%3E");
+    mix-blend-mode  : soft-light;
+    opacity         : 0.4;
+    z-index         : 0;
+}
+
+.register-shell {
+    width          : min(1100px, 100%);
+    display        : flex;
+    justify-content: center;
+    position       : relative;
+    z-index        : 1;
+}
+
+/* ===== Cards ===== */
+.register-card {
+    border-radius  : var(--register-radius);
+    padding        : clamp(1.35rem, 2.8vw, 2.5rem);
+    border         : 1px solid var(--register-border-dark);
+    box-shadow     : 0 35px 70px rgba(2, 6, 23, 0.45);
+    display        : flex;
+    flex-direction : column;
+    gap            : clamp(0.75rem, 1.6vw, 1.35rem);
+    backdrop-filter: blur(18px);
+}
+
+.register-card--form {
+    background  : var(--register-card-light);
+    color       : #0f172a;
+    border-color: rgba(15, 23, 42, 0.08);
+    gap         : clamp(0.75rem, 1.5vw, 1.25rem);
+}
+
+/* ===== Form Column ===== */
+.register-form-container {
+    width         : 100%;
+    margin        : 0 auto;
+    display       : flex;
+    flex-direction: column;
+    gap           : clamp(0.75rem, 1.4vw, 1.15rem);
+}
+
+.register-content-grid {
+    display              : grid;
+    grid-template-columns: minmax(230px, 0.85fr) minmax(360px, 1fr);
+    gap                  : clamp(1rem, 2vw, 1.75rem);
+    align-items          : flex-start;
+}
+
+.register-instructions {
+    background     : linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 118, 110, 0.7));
+    border-radius  : 24px;
+    border         : 1px solid rgba(255, 255, 255, 0.08);
+    padding        : 1.35rem;
+    color          : #e2e8f0;
+    box-shadow     : inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+.register-instructions-lede {
+    margin     : 0 0 0.9rem;
+    font-size  : 0.9rem;
+    color      : rgba(226, 232, 240, 0.9);
+    line-height: 1.4;
+}
+
+.register-instruction-list {
+    list-style    : none;
+    margin        : 0;
+    padding       : 0;
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.75rem;
+    counter-reset : register-step;
+}
+
+.register-instruction-list li {
+    position     : relative;
+    padding      : 0.85rem 0.9rem 0.85rem 2.8rem;
+    border-radius: 18px;
+    background   : rgba(15, 23, 42, 0.55);
+    border       : 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.register-instruction-list li::before {
+    counter-increment: register-step;
+    content          : counter(register-step, decimal-leading-zero);
+    position         : absolute;
+    left             : 0.9rem;
+    top              : 50%;
+    transform        : translateY(-50%);
+    width            : 1.75rem;
+    height           : 1.75rem;
+    border-radius    : 0.6rem;
+    background       : rgba(99, 102, 241, 0.25);
+    border           : 1px solid rgba(129, 140, 248, 0.45);
+    display          : grid;
+    place-items      : center;
+    font-size        : 0.72rem;
+    font-weight      : 600;
+    color            : #dbeafe;
+}
+
+.register-instruction-list h2 {
+    margin   : 0 0 0.15rem;
+    font-size: 0.95rem;
+    color    : #f8fafc;
+}
+
+.register-instruction-list p {
+    margin   : 0;
+    font-size: 0.8rem;
+    color    : rgba(226, 232, 240, 0.78);
+}
+
+.register-form-panel {
+    display       : flex;
+    flex-direction: column;
+    gap           : clamp(0.8rem, 1.4vw, 1.3rem);
+}
+
+.register-form-head {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.35rem;
+}
+
+.register-form-head h2 {
+    margin     : 0;
+    font-size  : 1.9rem;
+    font-weight: 600;
+}
+
+.register-form-head p {
+    margin   : 0;
+    color    : var(--register-muted);
+    font-size: 0.95rem;
+}
+
+.register-step-tabs {
+    display              : grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap                  : 0.45rem;
+    background           : #e2e8f0;
+    border-radius        : 999px;
+    padding              : 0.18rem;
+}
+
+.register-step-tabs button {
+    border       : none;
+    border-radius: 999px;
+    padding      : 0.55rem 0.9rem;
+    font-weight  : 600;
+    font-size    : 0.85rem;
+    background   : transparent;
+    color        : #475569;
+    cursor       : pointer;
+    transition   : background 160ms ease, color 160ms ease;
+}
+
+.register-step-tabs button.active {
+    background: linear-gradient(120deg, #7c3aed, #5b21b6);
+    color     : #fff;
+}
+
+.register-form {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.85rem;
+}
+
+.register-field {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.35rem;
+    font-size     : 0.85rem;
+    font-weight   : 600;
+    color         : #0f172a;
+}
+
+.register-input,
+.register-country-select,
+.register-inline-input input {
+    border-radius: 1.1rem;
+    border       : 1px solid var(--register-border-light);
+    background   : #fff;
+    padding      : 0.8rem 1rem;
+    font-size    : 0.95rem;
+    transition   : border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.register-input:focus,
+.register-country-select:focus,
+.register-inline-input input:focus {
+    outline     : none;
+    border-color: #7c3aed;
+    box-shadow  : 0 0 0 3px rgba(124, 58, 237, 0.18);
+}
+
+.register-field-group {
+    display              : grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap                  : 0.75rem;
+}
+
+.register-password-field {
+    border-radius: 1.1rem;
+    border       : 1px solid var(--register-border-light);
+    background   : #fff;
+    display      : flex;
+    align-items  : center;
+    padding      : 0.1rem 0.35rem 0.1rem 0.75rem;
+}
+
+.register-password-field input {
+    flex      : 1;
+    border    : none;
+    padding   : 0.7rem 0;
+    background: transparent;
+}
+
+.register-password-field input:focus {
+    outline: none;
+}
+
+.register-password-toggle {
+    border     : none;
+    background : transparent;
+    font-size  : 0.76rem;
+    font-weight: 600;
+    color      : #7c849b;
+    padding    : 0 0.7rem;
+    cursor     : pointer;
+}
+
+.register-phone-grid {
+    display              : grid;
+    grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1fr);
+    gap                  : 0.75rem;
+}
+
+.register-inline-input {
+    display    : flex;
+    gap        : 0.65rem;
+    flex-wrap  : wrap;
+    align-items: flex-end;
+}
+
+.register-inline-input button {
+    border-radius: 1.1rem;
+    padding      : 0.75rem 1.2rem;
+    border       : 1px solid rgba(15, 23, 42, 0.14);
+    background   : #f1f5f9;
+    font-weight  : 600;
+    color        : #0f172a;
+    transition   : transform 150ms ease, border-color 150ms ease;
+}
+
+.register-inline-input button:hover:not(:disabled) {
+    transform   : translateY(-1px);
+    border-color: #7c3aed;
+}
+
+.register-inline-input button:disabled {
+    opacity: 0.55;
+    cursor : not-allowed;
+}
+
+.register-otp-message {
+    font-size: 0.82rem;
+    margin   : -0.15rem 0 0;
+}
+
+.register-submit {
+    border       : none;
+    border-radius: 999px;
+    padding      : 0.9rem 1.1rem;
+    font-weight  : 600;
+    font-size    : 1rem;
+    color        : #fff;
+    background   : linear-gradient(120deg, #7c3aed, #10b981);
+    box-shadow   : 0 22px 40px rgba(16, 185, 129, 0.32);
+    transition   : transform 160ms ease, box-shadow 160ms ease;
+}
+
+.register-submit:disabled {
+    opacity: 0.65;
+    cursor : not-allowed;
+}
+
+.register-submit:hover:not(:disabled) {
+    transform : translateY(-2px);
+    box-shadow: 0 26px 46px rgba(16, 185, 129, 0.38);
+}
+
+.register-back-link {
+    border         : none;
+    background     : transparent;
+    color          : var(--register-muted);
+    font-weight    : 600;
+    font-size      : 0.85rem;
+    text-decoration: underline;
+    align-self     : flex-start;
+}
+
+.register-divider {
+    text-align    : center;
+    font-size     : 0.7rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color         : #94a3b8;
+}
+
+.register-google {
+    margin-top     : 0.3rem;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    gap            : 0.55rem;
+    border-radius  : 999px;
+    border         : 1px solid var(--register-border-light);
+    padding        : 0.75rem 1.1rem;
+    font-weight    : 600;
+    background     : #fff;
+    color          : #0f172a;
+}
+
+.register-google svg {
+    width : 20px;
+    height: 20px;
+}
+
+.register-footer-note {
+    text-align: center;
+    font-size : 0.88rem;
+    color     : var(--register-muted);
+    margin-top: 0.65rem;
+}
+
+.register-footer-note a {
+    color          : #7c3aed;
+    font-weight    : 600;
+    text-decoration: none;
+}
+
+.register-footer-note a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 992px) {
+    .register-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .register-field-group,
+    .register-phone-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 540px) {
+    .register-card {
+        border-radius: 20px;
+        padding      : 1.2rem;
+    }
+
+    .register-step-tabs button {
+        font-size: 0.78rem;
+    }
+
+    .register-inline-input {
+        flex-direction: column;
+        align-items   : stretch;
+    }
+
+    .register-inline-input button {
+        width: 100%;
+    }
+}

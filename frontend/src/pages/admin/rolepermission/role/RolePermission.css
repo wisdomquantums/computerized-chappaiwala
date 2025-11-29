@@ -1,0 +1,653 @@
+.rolepermission-page {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1.75rem;
+}
+
+.rolepermission-head {
+    display        : flex;
+    flex-wrap      : wrap;
+    justify-content: space-between;
+    gap            : 1rem;
+    align-items    : center;
+    padding-bottom : 1rem;
+    margin-bottom  : 1.25rem;
+    border-bottom  : 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.rolepermission-head-controls {
+    display        : flex;
+    flex-wrap      : wrap;
+    gap            : 0.75rem;
+    align-items    : center;
+    justify-content: flex-end;
+}
+
+.rolepermission-head h1 {
+    font-size  : 1.5rem;
+    font-weight: 700;
+    color      : #0f172a;
+}
+
+.rolepermission-head p {
+    color     : #475569;
+    margin-top: 0.35rem;
+}
+
+.rolepermission-search input {
+    min-width    : 240px;
+    border       : 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 999px;
+    padding      : 0.65rem 1.1rem;
+    font-size    : 0.9rem;
+    transition   : border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rolepermission-search input:focus {
+    outline     : none;
+    border-color: #38bdf8;
+    box-shadow  : 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.rolepermission-layout {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1.5rem;
+}
+
+.rolepermission-card {
+    border-radius: 24px;
+    border       : 1px solid rgba(148, 163, 184, 0.25);
+    background   : rgba(255, 255, 255, 0.9);
+    box-shadow   : 0 25px 60px -35px rgba(15, 23, 42, 0.4);
+    padding      : 1.5rem;
+}
+
+.rolepermission-table-card {
+    padding: 1.25rem 1.5rem;
+}
+
+.rolepermission-card h2 {
+    font-size  : 1.1rem;
+    font-weight: 600;
+    color      : #0f172a;
+}
+
+.rolepermission-form {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1rem;
+}
+
+.rolepermission-form label {
+    font-size     : 0.8rem;
+    font-weight   : 600;
+    color         : #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.rolepermission-form input,
+.rolepermission-form textarea,
+.rolepermission-form select {
+    width        : 100%;
+    border       : 1px solid rgba(148, 163, 184, 0.45);
+    border-radius: 1rem;
+    padding      : 0.7rem 0.9rem;
+    font-size    : 0.9rem;
+    transition   : border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rolepermission-form textarea {
+    min-height: 120px;
+    resize    : vertical;
+}
+
+.rolepermission-form input:focus,
+.rolepermission-form textarea:focus,
+.rolepermission-form select:focus {
+    outline     : none;
+    border-color: #38bdf8;
+    box-shadow  : 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+.rolepermission-suggestions {
+    display  : flex;
+    flex-wrap: wrap;
+    gap      : 0.5rem;
+}
+
+.rolepermission-suggestion {
+    border       : 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 999px;
+    padding      : 0.35rem 0.85rem;
+    font-size    : 0.8rem;
+    cursor       : pointer;
+    background   : rgba(148, 163, 184, 0.12);
+    transition   : border-color 0.2s ease, background 0.2s ease;
+}
+
+.rolepermission-suggestion:hover {
+    border-color: #38bdf8;
+    background  : rgba(56, 189, 248, 0.12);
+}
+
+.rolepermission-actions {
+    display        : flex;
+    flex-wrap      : wrap;
+    gap            : 0.75rem;
+    justify-content: flex-end;
+}
+
+.rolepermission-actions button,
+.rolepermission-actions .button-link,
+.rolepermission-btn {
+    border       : none;
+    border-radius: 999px;
+    padding      : 0.55rem 1.4rem;
+    font-weight  : 600;
+    font-size    : 0.9rem;
+    cursor       : pointer;
+}
+
+.rolepermission-actions .primary,
+.rolepermission-btn.primary {
+    background: #0ea5e9;
+    color     : #fff;
+    box-shadow: 0 15px 32px -22px rgba(14, 165, 233, 0.9);
+}
+
+.rolepermission-actions .ghost,
+.rolepermission-btn.ghost {
+    background: rgba(148, 163, 184, 0.18);
+    color     : #0f172a;
+}
+
+.rolepermission-actions .ghost.danger,
+.rolepermission-btn.ghost.danger {
+    color     : #b91c1c;
+    background: rgba(239, 68, 68, 0.12);
+}
+
+.rolepermission-actions-inline {
+    justify-content: flex-start;
+}
+
+.rolepermission-permissions {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.5rem;
+}
+
+.rolepermission-permission-list {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap                  : 0.6rem;
+    max-height           : 220px;
+    overflow             : auto;
+}
+
+.rolepermission-permission {
+    border       : 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 1rem;
+    padding      : 0.65rem;
+    font-size    : 0.8rem;
+    display      : flex;
+    gap          : 0.5rem;
+}
+
+.rolepermission-permission--highlight {
+    border-color: #38bdf8;
+    box-shadow  : 0 0 0 2px rgba(56, 189, 248, 0.25);
+}
+
+.rolepermission-permission input {
+    margin-top: 0.2rem;
+}
+
+.rolepermission-list {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1rem;
+}
+
+.rolepermission-role-meta {
+    color    : #475569;
+    font-size: 0.85rem;
+}
+
+.rolepermission-section-subtitle {
+    color    : #475569;
+    margin   : 0.35rem 0 0;
+    font-size: 0.9rem;
+}
+
+.rolepermission-shell {
+    display       : flex;
+    flex-direction: column;
+    gap           : 1.5rem;
+}
+
+.rolepermission-hero {
+    display        : flex;
+    flex-wrap      : wrap;
+    gap            : 1.5rem;
+    align-items    : flex-start;
+    justify-content: space-between;
+}
+
+.rolepermission-hero h1 {
+    margin-top: 0.2rem;
+    font-size : 1.65rem;
+}
+
+.rolepermission-hero-tags {
+    display  : flex;
+    gap      : 0.35rem;
+    flex-wrap: wrap;
+    margin   : 1rem 0;
+}
+
+.rolepermission-hero-metrics {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap                  : 0.9rem;
+    min-width            : 260px;
+    flex                 : 1;
+}
+
+.rolepermission-metric-card {
+    border        : 1px solid rgba(148, 163, 184, 0.35);
+    border-radius : 18px;
+    padding       : 1rem;
+    background    : rgba(248, 250, 252, 0.7);
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.45rem;
+}
+
+.rolepermission-metric-card .label {
+    font-size     : 0.8rem;
+    color         : #475569;
+    margin        : 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rolepermission-metric-card .hint {
+    font-size: 0.8rem;
+    color    : #64748b;
+    margin   : 0;
+}
+
+.rolepermission-metric-card .trend {
+    font-size  : 0.8rem;
+    font-weight: 600;
+    color      : #16a34a;
+}
+
+.rolepermission-metric-card .trend.down {
+    color: #dc2626;
+}
+
+.rolepermission-metric-card.compact {
+    background: rgba(15, 23, 42, 0.04);
+}
+
+.rolepermission-hero-footer {
+    display    : flex;
+    align-items: center;
+    gap        : 0.75rem;
+    flex-wrap  : wrap;
+    margin-top : 1rem;
+}
+
+.rolepermission-status-pill {
+    padding       : 0.4rem 1rem;
+    border-radius : 999px;
+    font-weight   : 600;
+    text-transform: capitalize;
+    background    : rgba(148, 163, 184, 0.2);
+    color         : #0f172a;
+}
+
+.rolepermission-status-pill.active {
+    background: rgba(16, 185, 129, 0.2);
+    color     : #065f46;
+}
+
+.rolepermission-status-pill.inactive {
+    background: rgba(148, 163, 184, 0.4);
+    color     : #475569;
+}
+
+.rolepermission-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap                  : 1.25rem;
+}
+
+.rolepermission-highlight-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap                  : 1rem;
+    margin-top           : 1rem;
+}
+
+.rolepermission-journey-list,
+.rolepermission-checklist {
+    list-style    : none;
+    margin        : 1rem 0 0;
+    padding       : 0;
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.85rem;
+}
+
+.rolepermission-journey-list li,
+.rolepermission-checklist li {
+    border       : 1px solid rgba(148, 163, 184, 0.4);
+    border-radius: 16px;
+    padding      : 0.9rem;
+    background   : rgba(255, 255, 255, 0.7);
+}
+
+.rolepermission-journey-list .journey-head {
+    display        : flex;
+    justify-content: space-between;
+    font-size      : 0.85rem;
+    color          : #0f172a;
+    margin-bottom  : 0.35rem;
+}
+
+.rolepermission-journey-list p {
+    margin   : 0;
+    color    : #475569;
+    font-size: 0.9rem;
+}
+
+.rolepermission-checklist li {
+    display        : flex;
+    justify-content: space-between;
+    gap            : 1rem;
+    align-items    : flex-start;
+}
+
+.rolepermission-checklist p {
+    margin   : 0.25rem 0 0;
+    color    : #475569;
+    font-size: 0.85rem;
+}
+
+.rolepermission-checklist .status {
+    border        : 1px solid rgba(148, 163, 184, 0.45);
+    border-radius : 999px;
+    padding       : 0.25rem 0.9rem;
+    font-size     : 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.rolepermission-checklist .status.active {
+    border-color: rgba(34, 197, 94, 0.6);
+    color       : #059669;
+}
+
+.rolepermission-checklist .status.paused,
+.rolepermission-checklist .status.planned {
+    border-color: rgba(248, 113, 113, 0.6);
+    color       : #b91c1c;
+}
+
+.rolepermission-form-headline {
+    margin-bottom: 1rem;
+}
+
+.rolepermission-form-headline h3 {
+    margin   : 0.35rem 0 0;
+    font-size: 1.2rem;
+}
+
+.rolepermission-form-actions {
+    margin-top: 1.5rem;
+}
+
+.rolepermission-empty-card {
+    text-align    : center;
+    padding       : 2rem;
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.75rem;
+}
+
+.rolepermission-chip {
+    display      : inline-flex;
+    align-items  : center;
+    gap          : 0.25rem;
+    border-radius: 999px;
+    padding      : 0.2rem 0.8rem;
+    background   : rgba(56, 189, 248, 0.15);
+    color        : #0369a1;
+    font-size    : 0.75rem;
+    font-weight  : 600;
+}
+
+.rolepermission-toast {
+    border-radius: 999px;
+    padding      : 0.6rem 1rem;
+    font-size    : 0.9rem;
+    display      : inline-flex;
+    gap          : 0.5rem;
+    align-items  : center;
+}
+
+.rolepermission-toast button {
+    border     : none;
+    background : transparent;
+    cursor     : pointer;
+    font-weight: 600;
+    font-size  : 1rem;
+    color      : inherit;
+    line-height: 1;
+    padding    : 0;
+}
+
+.rolepermission-toast.success {
+    background: rgba(16, 185, 129, 0.15);
+    color     : #047857;
+}
+
+.rolepermission-toast.error {
+    background: rgba(239, 68, 68, 0.15);
+    color     : #b91c1c;
+}
+
+.rolepermission-table-wrapper {
+    width     : 100%;
+    overflow-x: auto;
+}
+
+.rolepermission-table-loading {
+    min-height     : 180px;
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+}
+
+.rolepermission-table {
+    width          : 100%;
+    border-collapse: collapse;
+    min-width      : 720px;
+    border         : 1px solid rgba(148, 163, 184, 0.3);
+    background     : rgba(255, 255, 255, 0.96);
+    box-shadow     : 0 30px 60px -40px rgba(15, 23, 42, 0.35);
+}
+
+.rolepermission-table th,
+.rolepermission-table td {
+    padding   : 0.85rem 0.95rem;
+    text-align: left;
+    border    : 1px solid rgba(148, 163, 184, 0.25);
+}
+
+.rolepermission-table th {
+    font-size     : 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color         : #475569;
+    background    : rgba(248, 250, 255, 0.92);
+    border-bottom : 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.rolepermission-table tbody td {
+    background: rgba(255, 255, 255, 0.98);
+}
+
+.rolepermission-table tbody tr:nth-child(even) td {
+    background: rgba(246, 249, 255, 0.98);
+}
+
+.rolepermission-row td {
+    vertical-align: top;
+    position      : relative;
+}
+
+.rolepermission-permission-cell {
+    position: relative;
+    display : inline-block;
+}
+
+.rolepermission-permission-pop {
+    position      : absolute;
+    top           : 110%;
+    left          : 0;
+    z-index       : 10;
+    background    : #0f172a;
+    color         : #f8fafc;
+    border-radius : 12px;
+    padding       : 0.75rem 1rem;
+    min-width     : 220px;
+    box-shadow    : 0 25px 40px -25px rgba(15, 23, 42, 0.9);
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.4rem;
+}
+
+.rolepermission-role-name {
+    display       : flex;
+    flex-direction: column;
+    gap           : 0.15rem;
+}
+
+.rolepermission-role-label {
+    font-weight: 600;
+    color      : #0f172a;
+}
+
+.rolepermission-role-name small {
+    color    : #64748b;
+    font-size: 0.75rem;
+}
+
+.rolepermission-status {
+    display       : inline-flex;
+    border-radius : 999px;
+    padding       : 0.25rem 0.9rem;
+    font-size     : 0.75rem;
+    font-weight   : 600;
+    text-transform: capitalize;
+}
+
+.rolepermission-status.active {
+    background: rgba(16, 185, 129, 0.15);
+    color     : #047857;
+}
+
+.rolepermission-status.inactive {
+    background: rgba(148, 163, 184, 0.2);
+    color     : #475569;
+}
+
+.rolepermission-status-btn {
+    border        : none;
+    border-radius : 999px;
+    padding       : 0.35rem 1rem;
+    font-weight   : 600;
+    font-size     : 0.85rem;
+    cursor        : pointer;
+    text-transform: capitalize;
+}
+
+.rolepermission-status-btn.active {
+    background: rgba(16, 185, 129, 0.15);
+    color     : #047857;
+}
+
+.rolepermission-status-btn.inactive {
+    background: rgba(148, 163, 184, 0.2);
+    color     : #475569;
+}
+
+.rolepermission-actions-group {
+    gap: 0.4rem;
+}
+
+.rolepermission-empty {
+    text-align: center;
+    font-size : 0.9rem;
+    color     : #475569;
+    padding   : 2rem 1rem;
+}
+
+.rolepermission-table-actions {
+    display  : flex;
+    gap      : 0.4rem;
+    flex-wrap: wrap;
+}
+
+.rolepermission-table-actions .rolepermission-btn {
+    padding  : 0.35rem 1rem;
+    font-size: 0.8rem;
+}
+
+.rolepermission-modal {
+    position       : fixed;
+    inset          : 0;
+    background     : rgba(15, 23, 42, 0.55);
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    padding        : 1.5rem;
+    z-index        : 50;
+}
+
+.rolepermission-modal-panel {
+    background   : rgba(255, 255, 255, 0.98);
+    border-radius: 24px;
+    padding      : 1.5rem;
+    width        : min(960px, 100%);
+    max-height   : 90vh;
+    overflow     : auto;
+    box-shadow   : 0 45px 80px -50px rgba(15, 23, 42, 0.65);
+}
+
+.rolepermission-modal-panel.small {
+    width: min(520px, 100%);
+}
+
+.rolepermission-modal-head {
+    display        : flex;
+    justify-content: space-between;
+    gap            : 1rem;
+    flex-wrap      : wrap;
+    margin-bottom  : 1.5rem;
+}
+
+.rolepermission-modal-head h2 {
+    margin   : 0;
+    font-size: 1.35rem;
+}
+
+.rolepermission-modal-footer {
+    justify-content: flex-end;
+}

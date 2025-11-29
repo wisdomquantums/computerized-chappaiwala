@@ -1,0 +1,77 @@
+.rolepermission-filter-bar {
+    display              : grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap                  : 1rem;
+    margin-bottom        : 1.25rem;
+}
+
+.rolepermission-filter-bar label {
+    display       : block;
+    font-size     : 0.75rem;
+    font-weight   : 600;
+    color         : #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.rolepermission-filter-bar select {
+    margin-top   : 0.35rem;
+    width        : 100%;
+    border-radius: 1rem;
+    border       : 1px solid rgba(148, 163, 184, 0.45);
+    padding      : 0.65rem 0.9rem;
+    font-size    : 0.85rem;
+    background   : #fff;
+}
+
+.rolepermission-table-wrapper {
+    overflow-x: auto;
+}
+
+.rolepermission-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.rolepermission-table tbody tr:hover {
+    background: rgba(241, 245, 249, 0.6);
+}
+
+.rolepermission-input {
+    width        : 100%;
+    border       : 1px solid rgba(148, 163, 184, 0.45);
+    border-radius: 999px;
+    padding      : 0.45rem 0.9rem;
+    font-size    : 0.85rem;
+    background   : rgba(15, 23, 42, 0.02);
+}
+
+.order-priority-pill {
+    display       : inline-flex;
+    align-items   : center;
+    gap           : 0.3rem;
+    border-radius : 999px;
+    padding       : 0.2rem 0.75rem;
+    font-size     : 0.75rem;
+    font-weight   : 600;
+    text-transform: uppercase;
+}
+
+.order-priority-pill.priority-low {
+    background: rgba(59, 130, 246, 0.12);
+    color     : #1d4ed8;
+}
+
+.order-priority-pill.priority-medium {
+    background: rgba(234, 179, 8, 0.15);
+    color     : #a16207;
+}
+
+.order-priority-pill.priority-high {
+    background: rgba(249, 115, 22, 0.15);
+    color     : #c2410c;
+}
+
+.order-priority-pill.priority-critical {
+    background: rgba(239, 68, 68, 0.2);
+    color     : #b91c1c;
+}

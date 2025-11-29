@@ -1,0 +1,93 @@
+.modal-overlay {
+    position       : fixed;
+    inset          : 0;
+    background     : rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    z-index        : 1000;
+    padding        : 1.5rem;
+}
+
+.modal-card {
+    width        : min(420px, 100%);
+    border-radius: 24px;
+    background   : #fff;
+    padding      : 2.25rem;
+    box-shadow   : 0 40px 90px -45px rgba(15, 23, 42, 0.65);
+    text-align   : center;
+    position     : relative;
+}
+
+.modal-icon {
+    width        : 64px;
+    height       : 64px;
+    border-radius: 18px;
+    display      : grid;
+    place-items  : center;
+    margin       : 0 auto 1.25rem;
+    font-size    : 1.5rem;
+}
+
+.modal-title {
+    font-size  : 1.35rem;
+    font-weight: 700;
+    color      : #0f172a;
+}
+
+.modal-message {
+    margin-top : 0.75rem;
+    color      : #475569;
+    line-height: 1.6;
+}
+
+.modal-actions {
+    margin-top     : 1.75rem;
+    display        : flex;
+    gap            : 0.75rem;
+    flex-wrap      : wrap;
+    justify-content: center;
+}
+
+.modal-button {
+    border       : none;
+    border-radius: 999px;
+    padding      : 0.55rem 1.8rem;
+    font-weight  : 600;
+    font-size    : 0.95rem;
+    cursor       : pointer;
+    transition   : transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.modal-button:focus-visible,
+.modal-button:hover {
+    transform : translateY(-1px);
+    box-shadow: 0 12px 30px -20px rgba(15, 23, 42, 0.3);
+}
+
+.modal-button.is-ghost {
+    background: rgba(148, 163, 184, 0.15);
+    color     : #0f172a;
+}
+
+.modal-button.is-danger {
+    background: #ef4444;
+    color     : #fff;
+}
+
+.modal-button.is-primary {
+    background: #0ea5e9;
+    color     : #fff;
+}
+
+.modal-close {
+    position  : absolute;
+    top       : 1rem;
+    right     : 1rem;
+    border    : none;
+    background: transparent;
+    font-size : 1.1rem;
+    cursor    : pointer;
+    color     : #94a3b8;
+}
