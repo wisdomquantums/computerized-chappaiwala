@@ -11,6 +11,12 @@ import {
 } from '../utils/otpStore.js'
 import { sendEmailOtpMessage } from '../utils/email.js'
 
+const setNoStore = (res) => {
+    if (res?.set) {
+        res.set('Cache-Control', 'no-store')
+    }
+}
+
 const sanitizeRoleMeta = (roleMeta) => {
     if (!roleMeta) {
         return null
@@ -230,6 +236,7 @@ export const createUser = async (req, res, next) => {
             ],
         })
 
+        setNoStore(res)
         res.status(201).json({ user: sanitizeUser(user) })
     } catch (error) {
         next(error)
@@ -351,6 +358,7 @@ export const verifyEmailOtp = async (req, res) => {
 
 export const profile = async (req, res) => {
     const user = req.user
+    setNoStore(res)
     res.json({ user: sanitizeUser(user) })
 }
 
@@ -423,6 +431,7 @@ export const listUsers = async (req, res, next) => {
             ],
         })
         const normalized = users.map((user) => sanitizeUser(user))
+        setNoStore(res)
         res.json({ users: normalized })
     } catch (error) {
         next(error)
@@ -447,6 +456,7 @@ export const getUser = async (req, res, next) => {
             return res.status(404).json({ message: 'User not found' })
         }
 
+        setNoStore(res)
         res.json({ user })
     } catch (error) {
         next(error)
@@ -573,6 +583,7 @@ export const updateUserRole = async (req, res, next) => {
                 },
             ],
         })
+        setNoStore(res)
         res.json({ user: sanitizeUser(user) })
     } catch (error) {
         next(error)
@@ -603,6 +614,7 @@ export const deleteUser = async (req, res, next) => {
         }
 
         await user.destroy()
+        setNoStore(res)
         res.json({ message: 'User deleted' })
     } catch (error) {
         next(error)

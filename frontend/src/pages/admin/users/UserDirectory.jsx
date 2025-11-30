@@ -84,6 +84,16 @@ const UserDirectory = () => {
   const [addForm, setAddForm] = useState(() =>
     buildAddFormDefaults(defaultRole)
   );
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await dispatch(fetchUsers({ silent: true }));
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const [editForm, setEditForm] = useState({
     name: "",
     username: "",
@@ -95,10 +105,8 @@ const UserDirectory = () => {
   });
 
   useEffect(() => {
-    if (!usersState.loading && usersState.list.length === 0) {
-      dispatch(fetchUsers());
-    }
-  }, [dispatch, usersState.loading, usersState.list.length]);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const filteredUsers = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -135,7 +143,7 @@ const UserDirectory = () => {
         email: user.email || "",
         role: user.role || defaultRole,
         status: normalizeStatus(user.status),
-        address: user.addressText || user.address || "",
+        address: user.addressText || "",
         password: "",
       });
     }
@@ -227,14 +235,10 @@ const UserDirectory = () => {
       updates.status = editForm.status;
     }
 
-    const existingAddress = (
-      modal.user.addressText ||
-      modal.user.address ||
-      ""
-    ).trim();
+    const existingAddress = (modal.user.addressText || "").trim();
     const nextAddress = editForm.address.trim();
     if (existingAddress !== nextAddress) {
-      updates.address = editForm.address.trim();
+      updates.address = nextAddress;
     }
 
     if (editForm.password) {
@@ -607,6 +611,14 @@ const UserDirectory = () => {
               onClick={() => openModal("add")}
             >
               Add user
+            </button>
+            <button
+              type="button"
+              className="rolepermission-btn ghost"
+              onClick={handleRefresh}
+              disabled={refreshing}
+            >
+              {refreshing ? "Refreshing..." : "Refresh"}
             </button>
           </div>
         </div>
