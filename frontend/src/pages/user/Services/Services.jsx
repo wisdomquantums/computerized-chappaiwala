@@ -12,6 +12,7 @@ import Loader from "../../../components/ui/Loader";
 import resolveAssetUrl from "../../../utils/assetUrl";
 import PageSeo from "../../../components/seo/PageSeo";
 import { SITE_URL, BRAND_NAME, LOGO_URL } from "../../../constants/seo";
+import "./Services.css";
 
 const iconClass = "h-7 w-7 text-emerald-300";
 
@@ -451,7 +452,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
 
   return (
     <article
-      className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/80 to-slate-900/40 shadow-[0_35px_90px_rgba(2,6,23,0.55)] backdrop-blur"
+      className="service-card group relative flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-b from-slate-900/80 to-slate-900/40 shadow-[0_35px_90px_rgba(2,6,23,0.55)] backdrop-blur"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -459,10 +460,10 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
     >
       <span className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-400/10 via-transparent to-transparent opacity-0 blur-2xl transition group-hover:opacity-100" />
       <div className="relative flex flex-1 flex-col">
-        <figure className="overflow-hidden">
+        <figure className="service-card__figure overflow-hidden">
           <button
             type="button"
-            className="relative h-72 w-full cursor-pointer"
+            className="service-card__media relative h-72 w-full cursor-pointer"
             onClick={onMainClick}
           >
             <img
@@ -479,7 +480,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
             </span>
           </button>
           {length > 1 && (
-            <div className="grid grid-cols-5 overflow-hidden border-t border-white/10">
+            <div className="service-card__thumbs grid grid-cols-5 overflow-hidden border-t border-white/10">
               {gallery.slice(0, 5).map((url, idx) => (
                 <button
                   key={`${service.id}-thumb-${idx}`}
@@ -510,7 +511,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
           )}
         </figure>
 
-        <div className="flex flex-1 flex-col gap-6 p-6">
+        <div className="service-card__body flex flex-1 flex-col gap-6 p-6">
           <div className="flex items-center gap-4">
             <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/10 text-emerald-300">
               {serviceIcons[service.iconKey] || serviceIcons.default}
@@ -557,7 +558,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
           </div>
 
           <div className="mt-auto space-y-5">
-            <dl className="grid gap-4 text-sm text-slate-200 sm:grid-cols-2 xl:grid-cols-3">
+            <dl className="service-card__meta grid gap-4 text-sm text-slate-200 sm:grid-cols-2 xl:grid-cols-3">
               <div>
                 <dt className="text-xs uppercase tracking-[0.35em] text-slate-400">
                   Paper charge
@@ -585,7 +586,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
             </dl>
 
             <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-5">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="service-card__pricing flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="space-y-1">
                   <p className="text-3xl font-semibold text-white">
                     {finalPriceLabel}
@@ -594,7 +595,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
                     {priceBreakdown}
                   </p>
                 </div>
-                <div className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 text-white">
+                <div className="service-card__qty inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 text-white">
                   <button
                     type="button"
                     className="px-4 py-2 text-lg"
@@ -616,7 +617,7 @@ const ServiceCard = ({ service, autoplay = 3500, onBuyNow, onAddToCart }) => {
                   </button>
                 </div>
               </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <div className="service-card__actions mt-4 grid gap-3 sm:grid-cols-2">
                 <button
                   type="button"
                   className="rounded-full border border-white/30 px-5 py-2.5 text-sm font-semibold text-white transition hover:border-emerald-400/60"
@@ -820,10 +821,10 @@ const Services = () => {
       <main className="bg-slate-950 text-slate-100">
         <Reveal
           as="section"
-          className="relative isolate overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 px-4 py-24 sm:px-6 floating-orb"
+          className="services-hero relative isolate overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 px-4 py-24 sm:px-6 floating-orb"
         >
           <div className="absolute inset-y-0 left-1/2 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-emerald-500/10 blur-3xl" />
-          <div className="relative mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center">
+          <div className="services-hero__wrapper relative mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center">
             <div className="space-y-6 lg:flex-1">
               <p className="inline-flex rounded-full border border-white/15 px-4 py-1 text-xs font-semibold uppercase tracking-[0.45em] text-emerald-300">
                 {heroCopy.heroTagline}
@@ -834,24 +835,24 @@ const Services = () => {
               <p className="text-base text-slate-300 sm:text-lg">
                 {heroCopy.heroDescription}
               </p>
-              <div className="flex flex-wrap gap-3">
+              <div className="services-hero__cta flex flex-wrap gap-3">
                 <button
                   type="button"
-                  className="rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-emerald-500/30 transition hover:opacity-90"
+                  className="w-full rounded-full bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-3 text-center text-sm font-semibold text-slate-900 shadow-lg shadow-emerald-500/30 transition hover:opacity-90 sm:w-auto"
                   onClick={handlePrimaryCta}
                 >
                   {heroCopy.primaryCtaText || "Explore catalog"}
                 </button>
                 <button
                   type="button"
-                  className="rounded-full border border-white/25 px-6 py-3 text-sm font-semibold text-white transition hover:border-emerald-300/70"
+                  className="w-full rounded-full border border-white/25 px-6 py-3 text-center text-sm font-semibold text-white transition hover:border-emerald-300/70 sm:w-auto"
                   onClick={handleSecondaryCta}
                 >
                   {heroCopy.secondaryCtaText || "Download rate card"}
                 </button>
               </div>
             </div>
-            <div className="grid flex-1 gap-4 sm:grid-cols-3">
+            <div className="services-hero__stats grid flex-1 gap-4 sm:grid-cols-3">
               {heroStats.map((stat) => (
                 <div
                   key={stat.label}
@@ -872,8 +873,8 @@ const Services = () => {
 
         <Reveal as="section" className="px-4 py-16 sm:px-6 lg:px-12">
           <div className="space-y-8">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-              <div className="flex flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/90 px-5 py-3 text-slate-900">
+            <div className="services-controls flex flex-col gap-4 lg:flex-row lg:items-center">
+              <div className="services-controls__search flex flex-1 items-center gap-3 rounded-full border border-white/10 bg-white/90 px-5 py-3 text-slate-900">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -896,7 +897,7 @@ const Services = () => {
                   className="flex-1 border-none bg-transparent text-sm text-slate-900 focus:outline-none"
                 />
               </div>
-              <div className="flex items-center gap-3 text-sm">
+              <div className="services-controls__sort flex items-center gap-3 text-sm">
                 <label htmlFor="price-sort" className="text-slate-300">
                   Sort price
                 </label>
@@ -926,7 +927,7 @@ const Services = () => {
               </div>
             )}
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="services-categories grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {categories.map((category) => {
                 const isActive = activeCategory === category;
                 return (
@@ -955,7 +956,7 @@ const Services = () => {
 
             <div
               id="services-grid"
-              className="grid gap-6 md:grid-cols-2 xl:grid-cols-3"
+              className="services-grid grid gap-6 md:grid-cols-2 xl:grid-cols-3"
             >
               {isInitialLoading ? (
                 <div className="col-span-full">

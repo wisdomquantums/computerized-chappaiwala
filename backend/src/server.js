@@ -43,11 +43,30 @@ if (!fs.existsSync(uploadsDir)) {
 }
 app.use('/uploads', express.static(uploadsDir))
 
+const frontendDistDir = path.resolve(__dirname, '../../frontend/dist')
+const frontendIndexFile = path.join(frontendDistDir, 'index.html')
+const serveFrontend = fs.existsSync(frontendDistDir)
+if (serveFrontend) {
+    app.use(express.static(frontendDistDir))
+}
+
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', timestamp: new Date().toISOString() })
 })
 
 app.use('/api', routes)
+
+if (serveFrontend) {
+    app.get('*', (req, res, next) => {
+        if (req.originalUrl?.startsWith('/api') || req.originalUrl?.startsWith('/uploads')) {
+            return next()
+        }
+        if (fs.existsSync(frontendIndexFile)) {
+            return res.sendFile(frontendIndexFile)
+        }
+        return next()
+    })
+}
 
 app.use(notFound)
 app.use(errorHandler)

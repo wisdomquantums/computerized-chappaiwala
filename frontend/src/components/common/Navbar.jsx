@@ -1,8 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import navConfig, { authActions, primaryNav } from "../../_nav";
 import { logout } from "../../features/auth/authSlice";
+import "./Navbar.css";
 
 const profileMenuItems = [
   { key: "edit-profile", label: "Edit Profile", to: "/profile/edit" },
@@ -24,8 +31,11 @@ const Navbar = () => {
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
   const authMenuRef = useRef(null);
+  const headerRef = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(80);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useSelector((state) => state.auth);
   const cartCount = useSelector(
     (state) =>
@@ -39,6 +49,25 @@ const Navbar = () => {
       user && ["admin", "employee"].includes(user.role) ? "/admin/login" : "/";
     navigate(redirectPath);
   };
+
+  const updateHeaderHeight = useCallback(() => {
+    if (headerRef.current) {
+      setHeaderHeight(headerRef.current.getBoundingClientRect().height);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    updateHeaderHeight();
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+    window.addEventListener("resize", updateHeaderHeight);
+    return () => window.removeEventListener("resize", updateHeaderHeight);
+  }, [updateHeaderHeight]);
+
+  useEffect(() => {
+    updateHeaderHeight();
+  }, [open, profileMenuOpen, authMenuOpen, updateHeaderHeight]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,6 +86,36 @@ const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+    setProfileMenuOpen(false);
+    setAuthMenuOpen(false);
+  }, [location.pathname]);
 
   const userInitial = (user?.name || user?.email || "U")
     .charAt(0)
@@ -89,11 +148,16 @@ const Navbar = () => {
     }`;
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 text-white shadow-[0_18px_45px_rgba(2,6,23,0.65)] backdrop-blur">
-      <div className="mx-auto flex h-20 max-w-6xl items-center gap-6 px-6">
+    <header
+      ref={headerRef}
+      className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/95 text-white shadow-[0_18px_45px_rgba(2,6,23,0.65)] backdrop-blur"
+    >
+      <div className="navbar-shell mx-auto w-full max-w-screen-xl px-4 py-4 sm:px-6">
         <Link
           to="/"
-          className="flex flex-shrink-0 items-center gap-3 text-lg font-semibold text-white"
+          className="navbar-shell__logo flex flex-shrink-0 items-center gap-3 text-lg font-semibold text-white"
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
         >
           <img
             src="/logo.png"
@@ -102,7 +166,7 @@ const Navbar = () => {
           />
         </Link>
 
-        <nav className="hidden flex-1 items-center justify-center gap-3 text-sm font-medium md:flex">
+        <nav className="navbar-shell__primary hidden items-center justify-center gap-3 text-sm font-medium md:flex">
           {(navConfig.primary || primaryNav).map((item) => (
             <NavLink key={item.to} to={item.to} className={navLinkClass}>
               {item.label}
@@ -115,7 +179,7 @@ const Navbar = () => {
           ))}
         </nav>
 
-        <div className="hidden flex-shrink-0 items-center gap-3 md:flex">
+        <div className="navbar-shell__actions hidden flex-shrink-0 items-center gap-3 md:flex">
           {user && (
             <Link
               to="/cart"
@@ -361,7 +425,7 @@ const Navbar = () => {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white md:hidden"
+          className="navbar-shell__toggle inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white md:hidden"
           onClick={() => setOpen((prev) => !prev)}
         >
           <span className="sr-only">Toggle navigation</span>
@@ -391,194 +455,242 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-slate-950/95 px-6 py-4 text-white shadow-[0_20px_40px_rgba(2,6,23,0.65)] md:hidden">
-          <div className="flex flex-col gap-4 text-sm font-medium">
-            {(navConfig.primary || primaryNav).map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `rounded-full border px-4 py-2 ${
-                    isActive
-                      ? "border-white/20 bg-white/10 text-white"
-                      : "border-white/5 text-slate-300 hover:bg-white/5"
-                  }`
-                }
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </NavLink>
-            ))}
-            {user && (
-              <Link
-                to="/cart"
-                className="flex items-center justify-between rounded-full border border-slate-200 px-4 py-2 text-slate-700"
-                onClick={() => setOpen(false)}
-              >
-                <span className="flex items-center gap-2">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.6}
-                    stroke="currentColor"
-                    className="h-5 w-5"
+        <>
+          <div
+            className="fixed inset-x-0 bottom-0 z-40 bg-slate-950/70 backdrop-blur-sm md:hidden"
+            style={{ top: headerHeight }}
+            onClick={() => setOpen(false)}
+          />
+          <div
+            id="mobile-navigation"
+            className="fixed inset-x-0 z-50 overflow-y-auto border-t border-white/10 bg-slate-950/95 px-4 py-6 text-white shadow-[0_25px_55px_rgba(2,6,23,0.75)] sm:px-6 md:hidden"
+            style={{
+              top: headerHeight,
+              maxHeight: `calc(100vh - ${headerHeight}px)`,
+            }}
+          >
+            <div className="flex flex-col gap-6 text-sm font-medium">
+              <div className="space-y-3">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+                  Browse
+                </p>
+                {(navConfig.primary || primaryNav).map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    className={({ isActive }) =>
+                      `flex items-center justify-between rounded-2xl border px-4 py-3 transition ${
+                        isActive
+                          ? "border-white/30 bg-white/10 text-white"
+                          : "border-white/10 text-slate-300 hover:border-white/20 hover:bg-white/5"
+                      }`
+                    }
+                    onClick={() => setOpen(false)}
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 2.25h2.386a1.5 1.5 0 011.47 1.185l.383 1.914M7.5 14.25h9.75a1.5 1.5 0 001.472-1.211l1.005-5.447A1.5 1.5 0 0018.25 6.75H6.489m1.011 7.5L5.5 5.349M7.5 14.25L5.5 5.349M7.5 18a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
-                    />
-                  </svg>
-                  Cart
-                </span>
-                {cartCount > 0 && (
-                  <span className="rounded-full bg-brand px-2 py-0.5 text-xs font-semibold text-white">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-            )}
-            {!user &&
-              (navConfig.actions || authActions).map((action) => {
-                if (action.variant === "menu" && action.items) {
-                  return (
-                    <div
-                      key={action.label}
-                      className="rounded-2xl border border-slate-200 p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-900 text-white">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={1.5}
-                            className="h-5 w-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0Z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M4.5 20.25a8.25 8.25 0 0115 0"
-                            />
-                          </svg>
+                    <span className="flex items-center gap-2">
+                      {item.label}
+                      {item.badge && (
+                        <span className="rounded-full bg-white/10 px-2 text-xs font-semibold text-white/70">
+                          {item.badge}
                         </span>
-                        <div>
-                          <p className="text-sm font-semibold text-slate-800">
-                            {action.label}
-                          </p>
-                          <p className="text-xs text-slate-500">
-                            Register or login instantly
-                          </p>
-                        </div>
-                      </div>
-                      <div className="mt-4 space-y-2">
-                        {action.items.map((item) => (
-                          <Link
-                            key={item.to}
-                            to={item.to}
-                            className="flex flex-col rounded-xl border border-slate-100 px-4 py-3"
-                            onClick={() => setOpen(false)}
-                          >
-                            <span className="text-sm font-semibold text-slate-800">
-                              {item.label}
-                            </span>
-                            {item.description && (
-                              <span className="text-xs text-slate-500">
-                                {item.description}
-                              </span>
-                            )}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                }
-
-                if (action.variant === "icon") {
-                  return (
-                    <Link
-                      key={action.to}
-                      to={action.to}
-                      aria-label={action.ariaLabel || action.label}
-                      className="flex items-center justify-center rounded-full border border-slate-200 px-4 py-2 text-slate-600"
-                      onClick={() => setOpen(false)}
+                      )}
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                      className="h-4 w-4"
                     >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m9 18 6-6-6-6"
+                      />
+                    </svg>
+                  </NavLink>
+                ))}
+              </div>
+
+              {user && (
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/40">
+                    Quick Access
+                  </p>
+                  <Link
+                    to="/cart"
+                    className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                    onClick={() => setOpen(false)}
+                  >
+                    <span className="flex items-center gap-2 text-white">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
-                        strokeWidth={1.5}
+                        strokeWidth={1.6}
                         stroke="currentColor"
                         className="h-5 w-5"
                       >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75M6.75 10.5h10.5c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125H6.75A1.125 1.125 0 015.625 19.875v-8.25c0-.621.504-1.125 1.125-1.125z"
+                          d="M2.25 2.25h2.386a1.5 1.5 0 011.47 1.185l.383 1.914M7.5 14.25h9.75a1.5 1.5 0 001.472-1.211l1.005-5.447A1.5 1.5 0 0018.25 6.75H6.489m1.011 7.5L5.5 5.349M7.5 14.25L5.5 5.349M7.5 18a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
                         />
                       </svg>
+                      Cart
+                    </span>
+                    {cartCount > 0 && (
+                      <span className="rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-semibold text-white">
+                        {cartCount}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              )}
+
+              {!user &&
+                (navConfig.actions || authActions).map((action) => {
+                  if (action.variant === "menu" && action.items) {
+                    return (
+                      <div
+                        key={action.label}
+                        className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4"
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950/80 text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={1.5}
+                              className="h-5 w-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0Z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M4.5 20.25a8.25 8.25 0 0115 0"
+                              />
+                            </svg>
+                          </span>
+                          <div>
+                            <p className="text-sm font-semibold text-white">
+                              {action.label}
+                            </p>
+                            <p className="text-xs text-slate-300">
+                              Register or login instantly
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          {action.items.map((item) => (
+                            <Link
+                              key={item.to}
+                              to={item.to}
+                              className="flex flex-col rounded-xl border border-white/10 px-4 py-3 text-left text-white"
+                              onClick={() => setOpen(false)}
+                            >
+                              <span className="text-sm font-semibold">
+                                {item.label}
+                              </span>
+                              {item.description && (
+                                <span className="text-xs text-white/60">
+                                  {item.description}
+                                </span>
+                              )}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  if (action.variant === "icon") {
+                    return (
+                      <Link
+                        key={action.to}
+                        to={action.to}
+                        aria-label={action.ariaLabel || action.label}
+                        className="flex items-center justify-center rounded-full border border-white/10 p-3 text-white/80"
+                        onClick={() => setOpen(false)}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="h-5 w-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75M6.75 10.5h10.5c.621 0 1.125.504 1.125 1.125v8.25c0 .621-.504 1.125-1.125 1.125H6.75A1.125 1.125 0 015.625 19.875v-8.25c0-.621.504-1.125 1.125-1.125z"
+                          />
+                        </svg>
+                      </Link>
+                    );
+                  }
+
+                  const baseClasses =
+                    action.variant === "primary"
+                      ? "rounded-full bg-white/90 px-4 py-3 text-center text-slate-900 font-semibold"
+                      : "rounded-full border border-white/10 px-4 py-3 text-center text-white";
+
+                  return (
+                    <Link
+                      key={action.to}
+                      to={action.to}
+                      className={baseClasses}
+                      onClick={() => setOpen(false)}
+                    >
+                      {action.label}
                     </Link>
                   );
-                }
+                })}
 
-                const baseClasses =
-                  action.variant === "primary"
-                    ? "rounded-full bg-brand px-4 py-2 text-center text-white"
-                    : "rounded-full border border-slate-200 px-4 py-2 text-center";
-
-                return (
-                  <Link
-                    key={action.to}
-                    to={action.to}
-                    className={baseClasses}
-                    onClick={() => setOpen(false)}
-                  >
-                    {action.label}
-                  </Link>
-                );
-              })}
-            {user && (
-              <div className="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                <div className="flex items-center gap-3">
-                  {profileAvatar ? (
-                    <img
-                      src={profileAvatar}
-                      alt={user?.name || "Profile avatar"}
-                      className="h-10 w-10 rounded-full object-cover shadow-inner shadow-black/20"
-                    />
-                  ) : (
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-semibold text-white">
-                      {userInitial}
-                    </span>
-                  )}
-                  <div>
-                    <p className="text-sm font-semibold text-slate-700">
-                      {user.name}
-                    </p>
-                    <p className="text-xs text-slate-500">{user.email}</p>
+              {user && (
+                <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-4">
+                  <div className="flex items-center gap-3">
+                    {profileAvatar ? (
+                      <img
+                        src={profileAvatar}
+                        alt={user?.name || "Profile avatar"}
+                        className="h-11 w-11 rounded-full object-cover shadow-inner shadow-black/40"
+                      />
+                    ) : (
+                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 text-sm font-semibold text-white">
+                        {userInitial}
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-white/60">{user.email}</p>
+                    </div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleLogout();
+                      setOpen(false);
+                    }}
+                    className="mt-4 w-full rounded-full bg-white/90 py-2 text-center text-xs font-semibold text-slate-900"
+                  >
+                    Logout
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleLogout();
-                    setOpen(false);
-                  }}
-                  className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </header>
   );

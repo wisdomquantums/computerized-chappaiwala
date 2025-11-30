@@ -432,8 +432,8 @@ const Home = () => {
             </div>
           </div>
         )}
-        <section className="relative min-h-[600px] overflow-hidden bg-slate-950 text-white floating-orb">
-          <div className="absolute inset-0">
+        <section className="relative overflow-hidden bg-slate-950 text-white floating-orb">
+          <div className="absolute inset-0 min-h-[520px]">
             {slides.map((slide, index) => (
               <img
                 key={slide.title}
@@ -449,7 +449,7 @@ const Home = () => {
 
           <Reveal
             as="div"
-            className="relative flex flex-col justify-center h-full max-w-6xl px-6 py-16 mx-auto lg:px-10"
+            className="relative mx-auto flex min-h-[520px] max-w-6xl flex-col justify-center px-4 pb-28 pt-24 sm:px-6 lg:px-10"
             once={false}
           >
             {slides.length > 0 && (
@@ -463,7 +463,7 @@ const Home = () => {
             <p className="max-w-2xl mt-6 text-base text-slate-200 sm:text-lg">
               {slides[currentSlide]?.description}
             </p>
-            <div className="flex flex-wrap gap-4 mt-10">
+            <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 to="/contact"
                 className="px-6 py-3 text-sm font-semibold bg-white rounded-full text-slate-900"
@@ -479,64 +479,66 @@ const Home = () => {
             </div>
           </Reveal>
 
-          <div className="absolute inset-x-0 flex items-center justify-center gap-6 px-6 pointer-events-none bottom-8">
-            <button
-              type="button"
-              onClick={handlePrevious}
-              className="inline-flex items-center justify-center text-white transition border rounded-full pointer-events-auto h-11 w-11 border-white/30 bg-white/10 hover:border-white hover:bg-white/20"
-              aria-label="Previous slide"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                className="w-5 h-5"
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 px-4 sm:px-6 lg:px-10">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6">
+              <button
+                type="button"
+                onClick={handlePrevious}
+                className="pointer-events-auto inline-flex h-11 w-full max-w-[180px] items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition hover:border-white hover:bg-white/20 sm:w-11 sm:max-w-none"
+                aria-label="Previous slide"
               >
-                <path
-                  d="m15 18-6-6 6-6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <div className="flex gap-2 pointer-events-auto">
-              {slides.map((slide, index) => (
-                <button
-                  key={slide.title}
-                  type="button"
-                  aria-label={`Go to slide ${index + 1}`}
-                  onClick={() => goToSlide(index)}
-                  className={`h-2 rounded-full transition-all duration-300 ${
-                    currentSlide === index
-                      ? "w-10 bg-white"
-                      : "w-5 bg-white/40 hover:bg-white/70"
-                  }`}
-                />
-              ))}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  className="h-5 w-5"
+                >
+                  <path
+                    d="m15 18-6-6 6-6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <div className="pointer-events-auto flex flex-1 flex-wrap items-center justify-center gap-2 sm:flex-none">
+                {slides.map((slide, index) => (
+                  <button
+                    key={slide.title}
+                    type="button"
+                    aria-label={`Go to slide ${index + 1}`}
+                    onClick={() => goToSlide(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      currentSlide === index
+                        ? "w-10 bg-white"
+                        : "w-5 bg-white/40 hover:bg-white/70"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={handleNext}
+                className="pointer-events-auto inline-flex h-11 w-full max-w-[180px] items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition hover:border-white hover:bg-white/20 sm:w-11 sm:max-w-none"
+                aria-label="Next slide"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  className="h-5 w-5"
+                >
+                  <path
+                    d="m9 6 6 6-6 6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="inline-flex items-center justify-center text-white transition border rounded-full pointer-events-auto h-11 w-11 border-white/30 bg-white/10 hover:border-white hover:bg-white/20"
-              aria-label="Next slide"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                className="w-5 h-5"
-              >
-                <path
-                  d="m9 6 6 6-6 6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
           </div>
         </section>
 
@@ -555,13 +557,13 @@ const Home = () => {
                 design-first mindset, and relentless QC before anything leaves
                 the floor.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {homeSections.stats.map((stat, index) => (
                   <Reveal
                     as="div"
                     key={stat.label}
                     delay={index * 120}
-                    className="min-w-[160px] rounded-2xl border border-white/10 bg-white/5 px-6 py-4"
+                    className="rounded-2xl border border-white/10 bg-white/5 px-6 py-4"
                   >
                     <p className="text-3xl font-semibold text-white">
                       {stat.value}
@@ -607,7 +609,7 @@ const Home = () => {
               custom-brief flows.
             </p>
           </div>
-          <div className="grid gap-6 mt-10 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {homeSections.services.map((service, index) => (
               <Reveal
                 as="div"
@@ -673,7 +675,7 @@ const Home = () => {
                 invitations, retail collateral, and experience branding.
               </p>
             </div>
-            <div className="grid gap-6 mt-12 lg:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {homeSections.portfolio.map((project, index) => (
                 <Reveal
                   as="div"
@@ -772,12 +774,12 @@ const Home = () => {
             </div>
             <Reveal
               as="div"
-              className="h-full p-0 border shadow-lg card-surface rounded-3xl border-slate-200"
+              className="card-surface h-full min-h-[320px] rounded-3xl border-slate-200 p-0 sm:min-h-[360px]"
             >
               <iframe
                 title="Computerized Chhappaiwala Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3581.652211730433!2d85.50191767508334!3d26.59587477687115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39ed0b7b5bb0cddf%3A0x81e294ba1bf4ae33!2sComputerized%20Chhappaiwala!5e0!3m2!1sen!2sin!4v1707800000000!5m2!1sen!2sin"
-                className="w-full h-full rounded-3xl"
+                className="h-[320px] w-full rounded-3xl border-0 sm:h-[360px] lg:h-full"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               ></iframe>

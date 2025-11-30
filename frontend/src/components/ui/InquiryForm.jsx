@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../../configs/axios";
+import "./InquiryForm.css";
 
 const DEFAULT_INQUIRY_EMAIL = "computerizedchhappaiwala@gmail.com";
 const SERVICE_OPTIONS = [
@@ -28,6 +29,7 @@ const InquiryForm = () => {
   const [status, setStatus] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const autoOpenRef = useRef(false);
 
   const inquiryEmail = useMemo(
     () => import.meta.env.VITE_INQUIRY_EMAIL || DEFAULT_INQUIRY_EMAIL,
@@ -35,25 +37,36 @@ const InquiryForm = () => {
   );
 
   useEffect(() => {
-    const updateVisibility = () => {
-      if (isAdminRoute) {
-        setIsOpen(false);
-        return;
-      }
-      setIsOpen(location.pathname === "/");
-    };
-
-    if (
-      typeof window === "undefined" ||
-      typeof window.requestAnimationFrame !== "function"
-    ) {
-      const timer = setTimeout(updateVisibility, 0);
-      return () => clearTimeout(timer);
+    if (isAdminRoute) {
+      setIsOpen(false);
+      autoOpenRef.current = false;
+      return;
     }
 
-    const rafId = window.requestAnimationFrame(updateVisibility);
-    return () => window.cancelAnimationFrame(rafId);
+    if (location.pathname === "/") {
+      if (!autoOpenRef.current) {
+        autoOpenRef.current = true;
+        setIsOpen(true);
+      }
+      return;
+    }
+
+    setIsOpen(false);
+    autoOpenRef.current = false;
   }, [location.pathname, isAdminRoute]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return undefined;
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = originalOverflow || "";
+      };
+    }
+    document.body.style.overflow = "";
+    return undefined;
+  }, [isOpen]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -105,9 +118,9 @@ const InquiryForm = () => {
   }
 
   const formContent = (
-    <>
-      <div className="flex flex-wrap items-start justify-between gap-6">
-        <div className="space-y-2">
+    <div className="inquiry-modal__content space-y-8">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2 text-center sm:text-left">
           <span className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-emerald-200">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
             Quick Inquiry
@@ -123,15 +136,15 @@ const InquiryForm = () => {
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="rounded-full bg-white/5 p-2 text-slate-300 transition hover:bg-white/10 hover:text-white"
+          className="self-end rounded-full bg-white/10 p-2 text-slate-300 transition hover:bg-white/20 hover:text-white sm:self-auto"
           aria-label="Close inquiry form"
         >
           ✕
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <form onSubmit={handleSubmit} className="inquiry-form space-y-5">
+        <div className="inquiry-form__grid">
           <label
             className="space-y-1 text-xs font-semibold text-slate-300"
             htmlFor="inquiry-name"
@@ -244,7 +257,7 @@ const InquiryForm = () => {
           {status.message}
         </p>
       )}
-    </>
+    </div>
   );
 
   return (
@@ -253,19 +266,27 @@ const InquiryForm = () => {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-24 right-6 z-[60] rounded-full bg-slate-900/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300 shadow-xl hover:bg-slate-800"
+          className="fixed bottom-24 right-6 z-[60] rounded-full bg-slate-900/90 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-emerald-300 shadow-xl transition hover:bg-slate-800"
         >
           Inquiry
         </button>
       )}
       {isOpen && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center px-4 py-8 sm:p-8">
+        <div className="inquiry-modal" role="presentation">
           <div
-            className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
+            className="inquiry-modal__backdrop"
             onClick={() => setIsOpen(false)}
+            aria-hidden="true"
           />
-          <div className="relative z-10 w-full max-w-2xl rounded-3xl border border-emerald-500/30 bg-slate-950/95 p-8 text-slate-50 shadow-2xl">
-            {formContent}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Quick inquiry form"
+            className="inquiry-modal__panel relative z-10 w-full max-w-md rounded-t-[32px] border border-emerald-500/30 bg-slate-950/95 text-slate-50 shadow-2xl sm:max-w-2xl sm:rounded-[32px]"
+          >
+            <div className="inquiry-modal__scroll" tabIndex={0}>
+              {formContent}
+            </div>
           </div>
         </div>
       )}

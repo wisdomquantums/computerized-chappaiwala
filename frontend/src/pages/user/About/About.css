@@ -1,0 +1,74 @@
+/* Responsive helpers for About page sections */
+.about-hero {
+    min-height: 560px;
+}
+
+.about-hero__wrapper {
+    gap: clamp(2rem, 4vw, 4rem);
+}
+
+.about-hero__stats {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.about-hero__stat-card {
+    min-height: 160px;
+}
+
+.about-hero__cta a {
+    flex: 1 1 220px;
+}
+
+.about-split {
+    align-items: center;
+}
+
+.about-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.about-founder__layout {
+    align-items          : center;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.about-founder__portrait img {
+    object-fit: cover;
+}
+
+.about-team__grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.about-team-card__inner {
+    min-height: 520px;
+}
+
+@media (max-width: 640px) {
+    .about-hero {
+        padding-top   : 4rem;
+        padding-bottom: 4rem;
+    }
+
+    .about-hero__stats {
+        gap: 0.75rem;
+    }
+
+    .about-founder__layout {
+        padding: 2rem;
+    }
+
+    .about-team-card__inner {
+        min-height: 460px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .about-hero__stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .about-founder__layout {
+        grid-template-columns: 420px auto;
+    }
+}

@@ -51,9 +51,7 @@ const PageSeo = ({
   structuredData = null,
   robots = "index,follow",
 }) => {
-  const hasBrand = title
-    ?.toLowerCase()
-    .includes(BRAND_NAME.toLowerCase());
+  const hasBrand = title?.toLowerCase().includes(BRAND_NAME.toLowerCase());
   const fullTitle = hasBrand ? title : `${title} | ${BRAND_NAME}`;
   const canonical = sanitizePath(path);
   const ogImage = image?.startsWith("http") ? image : `${SITE_URL}${image}`;
