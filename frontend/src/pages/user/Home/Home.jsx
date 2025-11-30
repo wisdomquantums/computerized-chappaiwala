@@ -433,7 +433,7 @@ const Home = () => {
           </div>
         )}
         <section className="relative overflow-hidden bg-slate-950 text-white floating-orb">
-          <div className="absolute inset-0 min-h-[520px]">
+          <div className="absolute inset-0 min-h-[480px] sm:min-h-[520px] lg:min-h-[600px]">
             {slides.map((slide, index) => (
               <img
                 key={slide.title}
@@ -449,7 +449,7 @@ const Home = () => {
 
           <Reveal
             as="div"
-            className="relative mx-auto flex min-h-[520px] max-w-6xl flex-col justify-center px-4 pb-28 pt-24 sm:px-6 lg:px-10"
+            className="relative mx-auto flex min-h-[480px] max-w-6xl flex-col items-center justify-center px-4 pb-32 pt-20 text-center sm:min-h-[520px] sm:items-start sm:px-6 sm:text-left lg:min-h-[600px] lg:px-10 lg:pb-36 lg:pt-24"
             once={false}
           >
             {slides.length > 0 && (
@@ -463,23 +463,23 @@ const Home = () => {
             <p className="max-w-2xl mt-6 text-base text-slate-200 sm:text-lg">
               {slides[currentSlide]?.description}
             </p>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
               <Link
                 to="/contact"
-                className="px-6 py-3 text-sm font-semibold bg-white rounded-full text-slate-900"
+                className="w-full rounded-full bg-white px-6 py-3 text-base font-semibold text-center text-slate-900 sm:w-auto"
               >
                 Start a Project
               </Link>
               <Link
                 to="/services"
-                className="px-6 py-3 text-sm font-semibold text-white border rounded-full border-white/30"
+                className="w-full rounded-full border border-white/30 px-6 py-3 text-base font-semibold text-center text-white sm:w-auto"
               >
                 Explore Services
               </Link>
             </div>
           </Reveal>
 
-          <div className="pointer-events-none absolute inset-x-0 bottom-4 px-4 sm:px-6 lg:px-10">
+          <div className="pointer-events-none absolute inset-x-0 bottom-5 px-4 sm:bottom-6 sm:px-6 lg:bottom-8 lg:px-10">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:gap-6">
               <button
                 type="button"

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import api from "../../configs/axios";
 import "./InquiryForm.css";
@@ -36,9 +36,11 @@ const InquiryForm = () => {
     []
   );
 
-  useEffect(() => {
+  const syncModalState = useCallback(() => {
     if (isAdminRoute) {
-      setIsOpen(false);
+      if (isOpen) {
+        setIsOpen(false);
+      }
       autoOpenRef.current = false;
       return;
     }
@@ -51,9 +53,19 @@ const InquiryForm = () => {
       return;
     }
 
-    setIsOpen(false);
+    if (isOpen) {
+      setIsOpen(false);
+    }
     autoOpenRef.current = false;
-  }, [location.pathname, isAdminRoute]);
+  }, [isAdminRoute, location.pathname, isOpen]);
+
+  useEffect(() => {
+    if (typeof requestAnimationFrame === "undefined") {
+      return undefined;
+    }
+    const frameId = requestAnimationFrame(syncModalState);
+    return () => cancelAnimationFrame(frameId);
+  }, [syncModalState]);
 
   useEffect(() => {
     if (typeof document === "undefined") return undefined;
