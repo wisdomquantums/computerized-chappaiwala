@@ -11,6 +11,18 @@ import {
 } from '../utils/otpStore.js'
 import { sendEmailOtpMessage } from '../utils/email.js'
 
+const sanitizeRoleMeta = (roleMeta) => {
+    if (!roleMeta) {
+        return null
+    }
+    const plain = typeof roleMeta.toJSON === 'function' ? roleMeta.toJSON() : roleMeta
+    return {
+        name: plain.name,
+        label: plain.label,
+        description: plain.description,
+    }
+}
+
 const sanitizeUser = (user) => ({
     id: user.id,
     name: user.name,
@@ -23,6 +35,7 @@ const sanitizeUser = (user) => ({
     company: user.company,
     designation: user.designation,
     gstNumber: user.gstNumber,
+    addressText: user.address || null,
     address: {
         line1: user.addressLine1,
         line2: user.addressLine2,
@@ -31,6 +44,7 @@ const sanitizeUser = (user) => ({
         pincode: user.pincode,
     },
     preferences: user.preferences || {},
+    roleMeta: sanitizeRoleMeta(user.roleMeta),
 })
 const normalizeRoleName = (value = '') => value.trim().toLowerCase()
 
@@ -204,6 +218,16 @@ export const createUser = async (req, res, next) => {
             password: hashed,
             role: normalizedRole,
             status: status === 'inactive' ? 'inactive' : 'active',
+        })
+
+        await user.reload({
+            include: [
+                {
+                    model: Role,
+                    as: 'roleMeta',
+                    attributes: ['name', 'label', 'description'],
+                },
+            ],
         })
 
         res.status(201).json({ user: sanitizeUser(user) })
@@ -390,7 +414,6 @@ export const listUsers = async (req, res, next) => {
     try {
         const users = await User.findAll({
             order: [['createdAt', 'DESC']],
-            attributes: { exclude: ['password'] },
             include: [
                 {
                     model: Role,
@@ -399,7 +422,8 @@ export const listUsers = async (req, res, next) => {
                 },
             ],
         })
-        res.json({ users })
+        const normalized = users.map((user) => sanitizeUser(user))
+        res.json({ users: normalized })
     } catch (error) {
         next(error)
     }
@@ -432,11 +456,26 @@ export const getUser = async (req, res, next) => {
 export const updateUserRole = async (req, res, next) => {
     try {
         const { id } = req.params
-        const { role, status } = req.body
+        const {
+            role,
+            status,
+            name,
+            username,
+            email,
+            password,
+            address,
+            addressLine1,
+            addressLine2,
+            city,
+            state,
+            pincode,
+        } = req.body
+
         const user = await User.findByPk(id)
         if (!user) {
             return res.status(404).json({ message: 'User not found' })
         }
+
         if (!canManageRole(req.user?.role, user.role)) {
             return res.status(403).json({ message: 'You are not allowed to update this account' })
         }
@@ -466,7 +505,74 @@ export const updateUserRole = async (req, res, next) => {
             }
             user.status = nextStatus
         }
+
+        if (typeof name !== 'undefined') {
+            const trimmed = String(name).trim()
+            if (!trimmed) {
+                return res.status(400).json({ message: 'Name cannot be empty' })
+            }
+            user.name = trimmed
+        }
+
+        if (typeof username !== 'undefined') {
+            const trimmed = String(username).trim().toLowerCase()
+            if (!trimmed) {
+                return res.status(400).json({ message: 'Username cannot be empty' })
+            }
+            if (trimmed !== user.username) {
+                const usernameExists = await User.findOne({ where: { username: trimmed } })
+                if (usernameExists && usernameExists.id !== user.id) {
+                    return res.status(409).json({ message: 'Username already exists' })
+                }
+                user.username = trimmed
+            }
+        }
+
+        if (typeof email !== 'undefined') {
+            const normalizedEmail = String(email).trim().toLowerCase()
+            if (!normalizedEmail) {
+                return res.status(400).json({ message: 'Email cannot be empty' })
+            }
+            if (normalizedEmail !== user.email) {
+                const emailExists = await User.findOne({ where: { email: normalizedEmail } })
+                if (emailExists && emailExists.id !== user.id) {
+                    return res.status(409).json({ message: 'Email already exists' })
+                }
+                user.email = normalizedEmail
+            }
+        }
+
+        if (typeof password !== 'undefined' && password !== null && String(password).length > 0) {
+            if (String(password).length < 6) {
+                return res.status(400).json({ message: 'Password must be at least 6 characters long' })
+            }
+            user.password = await bcrypt.hash(password, 10)
+        }
+
+        const assignOptionalField = (field, value) => {
+            if (typeof value === 'undefined') {
+                return
+            }
+            user[field] = value && String(value).trim() ? String(value).trim() : null
+        }
+
+        assignOptionalField('address', address)
+        assignOptionalField('addressLine1', addressLine1)
+        assignOptionalField('addressLine2', addressLine2)
+        assignOptionalField('city', city)
+        assignOptionalField('state', state)
+        assignOptionalField('pincode', pincode)
+
         await user.save()
+        await user.reload({
+            include: [
+                {
+                    model: Role,
+                    as: 'roleMeta',
+                    attributes: ['name', 'label', 'description'],
+                },
+            ],
+        })
         res.json({ user: sanitizeUser(user) })
     } catch (error) {
         next(error)

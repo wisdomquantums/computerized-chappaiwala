@@ -46,8 +46,10 @@ const normalizeRole = (value) => (value || "").toLowerCase();
 
 const buildAddFormDefaults = (role = "customer") => ({
   name: "",
+  username: "",
   email: "",
   password: "",
+  address: "",
   role,
   status: "active",
 });
@@ -84,9 +86,12 @@ const UserDirectory = () => {
   );
   const [editForm, setEditForm] = useState({
     name: "",
+    username: "",
     email: "",
     role: defaultRole,
     status: "active",
+    address: "",
+    password: "",
   });
 
   useEffect(() => {
@@ -103,7 +108,7 @@ const UserDirectory = () => {
         : true;
       if (!matchesRole) return false;
       if (!needle) return true;
-      return [user.name, user.email, user.role, user.status]
+      return [user.name, user.username, user.email, user.role, user.status]
         .filter(Boolean)
         .some((field) => field.toString().toLowerCase().includes(needle));
     });
@@ -126,9 +131,12 @@ const UserDirectory = () => {
     if (type === "edit" && user) {
       setEditForm({
         name: user.name || "",
+        username: user.username || "",
         email: user.email || "",
         role: user.role || defaultRole,
         status: normalizeStatus(user.status),
+        address: user.addressText || user.address || "",
+        password: "",
       });
     }
     setModal({ type, user });
@@ -139,28 +147,38 @@ const UserDirectory = () => {
     setAddForm(buildAddFormDefaults(defaultRole));
     setEditForm({
       name: "",
+      username: "",
       email: "",
       role: defaultRole,
       status: "active",
+      address: "",
+      password: "",
     });
   };
 
   const handleAddSubmit = async (event) => {
     event.preventDefault();
-    if (!addForm.name.trim() || !addForm.email.trim() || !addForm.password) {
+    if (
+      !addForm.name.trim() ||
+      !addForm.username.trim() ||
+      !addForm.email.trim() ||
+      !addForm.password
+    ) {
       showToast({
         type: "error",
-        message: "Name, email, and password are required.",
+        message: "Name, username, email, and password are required.",
       });
       return;
     }
 
     const payload = {
       name: addForm.name.trim(),
+      username: addForm.username.trim(),
       email: addForm.email.trim(),
       password: addForm.password,
       role: addForm.role,
       status: addForm.status,
+      address: addForm.address.trim(),
     };
 
     const result = await dispatch(createUser(payload));
@@ -181,11 +199,12 @@ const UserDirectory = () => {
     if (!modal.user) return;
 
     const trimmedName = editForm.name.trim();
+    const trimmedUsername = editForm.username.trim();
     const trimmedEmail = editForm.email.trim();
-    if (!trimmedName || !trimmedEmail) {
+    if (!trimmedName || !trimmedUsername || !trimmedEmail) {
       showToast({
         type: "error",
-        message: "Name and email are required.",
+        message: "Name, username, and email are required.",
       });
       return;
     }
@@ -197,12 +216,36 @@ const UserDirectory = () => {
     if (trimmedEmail && trimmedEmail !== modal.user.email) {
       updates.email = trimmedEmail;
     }
+    if (trimmedUsername && trimmedUsername !== (modal.user.username || "")) {
+      updates.username = trimmedUsername;
+    }
     if (editForm.role && editForm.role !== modal.user.role) {
       updates.role = editForm.role;
     }
     const existingStatus = normalizeStatus(modal.user.status);
     if (editForm.status && existingStatus !== editForm.status) {
       updates.status = editForm.status;
+    }
+
+    const existingAddress = (
+      modal.user.addressText ||
+      modal.user.address ||
+      ""
+    ).trim();
+    const nextAddress = editForm.address.trim();
+    if (existingAddress !== nextAddress) {
+      updates.address = editForm.address.trim();
+    }
+
+    if (editForm.password) {
+      if (editForm.password.length < 6) {
+        showToast({
+          type: "error",
+          message: "Password must be at least 6 characters.",
+        });
+        return;
+      }
+      updates.password = editForm.password;
     }
 
     if (Object.keys(updates).length === 0) {
@@ -273,6 +316,18 @@ const UserDirectory = () => {
       </label>
 
       <label>
+        Username
+        <input
+          type="text"
+          value={addForm.username}
+          onChange={(event) =>
+            setAddForm((prev) => ({ ...prev, username: event.target.value }))
+          }
+          placeholder="unique.username"
+        />
+      </label>
+
+      <label>
         Email address
         <input
           type="email"
@@ -293,6 +348,18 @@ const UserDirectory = () => {
             setAddForm((prev) => ({ ...prev, password: event.target.value }))
           }
           placeholder="Minimum 8 characters"
+        />
+      </label>
+
+      <label>
+        Address
+        <textarea
+          rows={3}
+          value={addForm.address}
+          onChange={(event) =>
+            setAddForm((prev) => ({ ...prev, address: event.target.value }))
+          }
+          placeholder="Optional mailing address"
         />
       </label>
 
@@ -376,6 +443,18 @@ const UserDirectory = () => {
       </label>
 
       <label>
+        Username
+        <input
+          type="text"
+          value={editForm.username}
+          onChange={(event) =>
+            setEditForm((prev) => ({ ...prev, username: event.target.value }))
+          }
+          placeholder="unique.username"
+        />
+      </label>
+
+      <label>
         Email address
         <input
           type="email"
@@ -384,6 +463,30 @@ const UserDirectory = () => {
             setEditForm((prev) => ({ ...prev, email: event.target.value }))
           }
           placeholder="name@company.com"
+        />
+      </label>
+
+      <label>
+        Address
+        <textarea
+          rows={3}
+          value={editForm.address}
+          onChange={(event) =>
+            setEditForm((prev) => ({ ...prev, address: event.target.value }))
+          }
+          placeholder="Optional mailing address"
+        />
+      </label>
+
+      <label>
+        Reset password
+        <input
+          type="password"
+          value={editForm.password}
+          onChange={(event) =>
+            setEditForm((prev) => ({ ...prev, password: event.target.value }))
+          }
+          placeholder="Leave blank to keep current password"
         />
       </label>
 
@@ -493,7 +596,7 @@ const UserDirectory = () => {
             <div className="rolepermission-search">
               <input
                 type="search"
-                placeholder="Search by name, email, or status"
+                placeholder="Search by name, username, email, or status"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
