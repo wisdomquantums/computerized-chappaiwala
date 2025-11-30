@@ -10,7 +10,9 @@
   -webkit-font-smoothing: antialiased;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -39,11 +41,11 @@ body {
 }
 
 .container-section {
-  @apply mx-auto max-w-6xl px-6 py-16;
+  @apply max-w-6xl px-6 py-16 mx-auto;
 }
 
 .card-surface {
-  @apply rounded-2xl border border-slate-200 bg-white/90 shadow-lg shadow-slate-200/60;
+  @apply border shadow-lg rounded-2xl border-slate-200 bg-white/90 shadow-slate-200/60;
 }
 
 .section-title {
@@ -51,7 +53,7 @@ body {
 }
 
 .section-subtitle {
-  @apply mt-2 max-w-2xl text-base text-slate-500;
+  @apply max-w-2xl mt-2 text-base text-slate-500;
 }
 
 .scroll-reveal {
